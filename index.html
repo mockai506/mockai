@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MockAI - AI Interview Coach</title>
+<meta name="description" content="AI powered mock interview coach - 50+ roles, real feedback!">
+<meta name="theme-color" content="#7c5cfc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MockAI">
+<link rel="manifest" href="data:application/json,{
+  %22name%22:%22MockAI - Interview Coach%22,
+  %22short_name%22:%22MockAI%22,
+  %22description%22:%22AI powered mock interview coach%22,
+  %22start_url%22:%22/%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%230a0a0f%22,
+  %22theme_color%22:%22%237c5cfc%22,
+  %22icons%22:[{
+    %22src%22:%22data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%237c5cfc'/%3E%3Cstop offset='100%25' style='stop-color:%23c084fc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='97' fill='url(%23bg)'/%3E%3Ccircle cx='100' cy='58' r='20' fill='%23fde68a'/%3E%3Cellipse cx='100' cy='42' rx='20' ry='9' fill='%231a0a0a'/%3E%3Cpath d='M80 78 Q100 72 120 78 L120 105 Q100 110 80 105 Z' fill='%231e3a5f'/%3E%3Cpolygon points='100,76 104,76 102,100 100,104 98,100' fill='%23f59e0b'/%3E%3Crect x='118' y='88' width='10' height='18' rx='5' fill='white'/%3E%3Ctext x='100' y='148' text-anchor='middle' font-family='Arial Black' font-size='28' font-weight='900'%3E%3Ctspan fill='white'%3EMock%3C/tspan%3E%3Ctspan fill='%23fcd34d'%3EAI%3C/tspan%3E%3C/text%3E%3C/svg%3E%22,
+    %22sizes%22:%22192x192%22,
+    %22type%22:%22image/svg+xml%22
+  }]
+}">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><defs><linearGradient id='bg' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%237c5cfc'/><stop offset='100%' style='stop-color:%23c084fc'/></linearGradient></defs><circle cx='100' cy='100' r='97' fill='url(%23bg)'/><circle cx='100' cy='58' r='20' fill='%23fde68a'/><ellipse cx='100' cy='42' rx='20' ry='9' fill='%231a0a0a'/><path d='M80 78 Q100 72 120 78 L120 105 Q100 110 80 105 Z' fill='%231e3a5f'/><polygon points='100,76 104,76 102,100 100,104 98,100' fill='%23f59e0b'/><rect x='118' y='88' width='10' height='18' rx='5' fill='white'/><text x='100' y='148' text-anchor='middle' font-family='Arial Black' font-size='28' font-weight='900'><tspan fill='white'>Mock</tspan><tspan fill='%23fcd34d'>AI</tspan></text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0f;color:#e8e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+.app{max-width:430px;margin:0 auto;min-height:100vh}
+.nav{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e1e2e;position:sticky;top:0;background:#0a0a0fdd;backdrop-filter:blur(12px);z-index:99}
+.logo{font-size:20px;font-weight:800}.logo span{color:#7c5cfc}
+.xp-bar-wrap{background:#1e1e2e;border-radius:20px;height:6px;width:80px}
+.xp-bar-fill{height:6px;border-radius:20px;background:linear-gradient(90deg,#7c5cfc,#c084fc);transition:width 0.4s}
+.xp-info{font-size:10px;color:#7c7c9e;text-align:right}
+
+/* Bottom Nav */
+.bnav{display:flex;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#0d0d1a;border-top:1px solid #1e1e2e;z-index:100}
+.bnav-btn{flex:1;padding:12px 4px 10px;text-align:center;cursor:pointer;font-size:9px;color:#7c7c9e;transition:all 0.15s}
+.bnav-btn.act{color:#c084fc}
+.bnav-icon{font-size:20px;display:block;margin-bottom:2px}
+
+.hero{background:linear-gradient(135deg,#1a0a2e,#0d0d2e);margin:16px;border-radius:20px;padding:20px;text-align:center}
+.hero h1{font-size:24px;font-weight:800;margin-bottom:6px;letter-spacing:-1px}
+.hero h1 em{font-style:normal;color:#c084fc}
+.hero p{color:#7c7c9e;font-size:12px;margin-bottom:16px}
+.stats{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.stat{background:#ffffff10;border-radius:10px;padding:8px 12px;text-align:center}
+.stat-n{font-size:18px;font-weight:800;color:#c084fc}
+.stat-l{font-size:9px;color:#7c7c9e}
+
+/* Daily Challenge Banner */
+.dc-banner{margin:0 16px 0;background:linear-gradient(135deg,#1a0a2e,#2a0a1e);border:1px solid #3e1e5e;border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dc-left{flex:1}
+.dc-tag{font-size:9px;letter-spacing:2px;color:#c084fc;text-transform:uppercase;margin-bottom:4px}
+.dc-title{font-size:13px;font-weight:700;margin-bottom:2px}
+.dc-sub{font-size:10px;color:#7c7c9e}
+.dc-xp{background:#7c5cfc;color:white;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;cursor:pointer;white-space:nowrap}
+
+.section{padding:0 16px 16px}
+.section h2{font-size:14px;font-weight:700;margin-bottom:10px}
+.lang-tabs{display:flex;gap:6px;margin-bottom:14px}
+.lang-tab{flex:1;padding:8px;background:#111120;border:1.5px solid #1e1e2e;border-radius:8px;color:#7c7c9e;font-size:11px;text-align:center;cursor:pointer;transition:all 0.15s}
+.lang-tab.sel{border-color:#7c5cfc;color:#c084fc;background:#1a1030}
+.cat-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px;scrollbar-width:none}
+.cat-scroll::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:6px 12px;background:#111120;border:1.5px solid #1e1e2e;border-radius:20px;color:#7c7c9e;font-size:11px;cursor:pointer;white-space:nowrap;transition:all 0.15s}
+.cat-btn.sel{border-color:#7c5cfc;color:#c084fc;background:#1a1030}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.card{background:#111120;border:1.5px solid #1e1e2e;border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;transition:all 0.2s}
+.card:hover,.card.sel{border-color:#7c5cfc;background:#1a1030}
+.icon{font-size:20px;margin-bottom:3px}
+.name{font-size:9px;color:#c8c8e0;font-weight:600;line-height:1.3}
+.levels{display:flex;gap:8px;margin-bottom:12px}
+.lvl{flex:1;padding:9px;background:#111120;border:1.5px solid #1e1e2e;border-radius:8px;color:#7c7c9e;font-size:11px;text-align:center;cursor:pointer;transition:all 0.15s}
+.lvl.sel,.lvl:hover{border-color:#7c5cfc;color:#c084fc;background:#1a1030}
+.diff-row{display:flex;gap:8px;margin-bottom:12px}
+.diff{flex:1;padding:9px;border-radius:8px;font-size:10px;font-weight:700;text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s}
+.diff-easy{background:#0d1a0d;border-color:#1e4e1e;color:#4ade80}
+.diff-easy.sel{background:#1a3a1a;border-color:#4ade80}
+.diff-med{background:#1a1500;border-color:#3a3000;color:#fbbf24}
+.diff-med.sel{background:#2a2000;border-color:#fbbf24}
+.diff-hard{background:#1a0d0d;border-color:#4e1e1e;color:#f87171}
+.diff-hard.sel{background:#2a1010;border-color:#f87171}
+
+/* Company Mode */
+.company-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;scrollbar-width:none}
+.company-scroll::-webkit-scrollbar{display:none}
+.co-card{flex-shrink:0;background:#111120;border:1.5px solid #1e1e2e;border-radius:12px;padding:10px 14px;text-align:center;cursor:pointer;transition:all 0.2s;min-width:70px}
+.co-card.sel{border-color:#7c5cfc;background:#1a1030}
+.co-icon{font-size:20px;margin-bottom:3px}
+.co-name{font-size:9px;color:#c8c8e0;font-weight:600}
+
+.info{background:#111120;border:1px solid #1e1e2e;border-radius:10px;padding:11px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:12px}
+.info-v{color:#c084fc;font-weight:700}
+.btn{width:100%;padding:15px;background:linear-gradient(135deg,#7c5cfc,#9b7cfc);border:none;border-radius:12px;color:white;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.btn:hover{opacity:0.9}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-outline{width:100%;padding:12px;background:transparent;border:1.5px solid #7c5cfc;border-radius:12px;color:#c084fc;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
+
+/* Timer */
+.timer-bar{height:4px;background:#1e1e2e;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.timer-fill{height:100%;border-radius:2px;transition:width 1s linear}
+.timer-txt{font-size:11px;text-align:right;margin-bottom:6px}
+.qa{background:#111120;border:1px solid #1e1e2e;border-radius:14px;padding:18px;margin:16px}
+.qa-n{font-size:10px;letter-spacing:2px;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px}
+.qa-q{font-size:15px;font-weight:600;line-height:1.5;margin-bottom:14px}
+.ta{width:100%;background:#0d0d1a;border:1.5px solid #1e1e2e;border-radius:10px;padding:12px;color:#e8e8f0;font-size:14px;font-family:inherit;resize:none;min-height:90px;margin-bottom:10px}
+.ta:focus{outline:none;border-color:#7c5cfc}
+
+/* Voice btn */
+.voice-btn{padding:14px 16px;background:#111120;border:1.5px solid #1e1e2e;border-radius:10px;color:#7c7c9e;cursor:pointer;font-size:18px;transition:all 0.2s}
+.voice-btn.listening{border-color:#f87171;color:#f87171;background:#1a0d0d;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+.fb{background:#0d1a0d;border:1px solid #1e4e1e;border-radius:12px;padding:14px;margin-bottom:10px}
+.fb-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.fb-l{font-size:10px;letter-spacing:2px;color:#4ade80;text-transform:uppercase}
+.fb-s{font-size:13px;font-weight:700;color:#4ade80;background:#0a2a0a;border:1px solid #1e4e1e;padding:3px 10px;border-radius:20px}
+.fb-txt{font-size:13px;color:#a8d8a8;line-height:1.6}
+.res{text-align:center;padding:20px 16px 80px}
+.res h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.res-s{color:#7c7c9e;font-size:12px;margin-bottom:16px}
+.ring{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.ring-in{width:74px;height:74px;background:#0a0a0f;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-n{font-size:24px;font-weight:800;color:#c084fc}
+.ring-d{font-size:10px;color:#7c7c9e}
+.grade{background:#1a1030;border:1px solid #3e2e7e;border-radius:12px;padding:12px;margin-bottom:14px}
+.grade-e{font-size:26px;margin-bottom:2px}
+.grade-l{font-size:15px;font-weight:800}
+.grade-desc{font-size:11px;color:#7c7c9e;margin-top:3px}
+
+/* XP Toast */
+.xp-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#7c5cfc;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:200;animation:toastIn 0.3s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+.qa-res{background:#111120;border:1px solid #1e1e2e;border-radius:12px;padding:12px;margin-bottom:8px;text-align:left}
+.qa-res-q{font-size:11px;font-weight:600;margin-bottom:3px}
+.qa-res-a{font-size:10px;color:#7c7c9e;font-style:italic;margin-bottom:3px}
+.qa-res-s{font-size:10px;color:#7c5cfc}
+.dot{width:6px;height:6px;background:#7c5cfc;border-radius:50%;display:inline-block;animation:b 1.2s infinite}
+.dot2{animation-delay:.2s}.dot3{animation-delay:.4s}
+@keyframes b{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-6px);opacity:1}}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;margin-left:4px}
+.badge-easy{background:#0d1a0d;color:#4ade80;border:1px solid #1e4e1e}
+.badge-med{background:#1a1500;color:#fbbf24;border:1px solid #3a3000}
+.badge-hard{background:#1a0d0d;color:#f87171;border:1px solid #4e1e1e}
+
+/* History Page */
+.hist-card{background:#111120;border:1px solid #1e1e2e;border-radius:12px;padding:14px;margin-bottom:10px}
+.hist-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.hist-role{font-size:13px;font-weight:700}
+.hist-score{font-size:13px;font-weight:800;color:#c084fc}
+.hist-meta{font-size:10px;color:#7c7c9e}
+.hist-bar{height:3px;background:#1e1e2e;border-radius:2px;margin-top:8px}
+.hist-bar-fill{height:3px;border-radius:2px;background:linear-gradient(90deg,#7c5cfc,#c084fc)}
+.empty-state{text-align:center;padding:40px 20px;color:#7c7c9e}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* XP Profile */
+.xp-card{background:linear-gradient(135deg,#1a0a2e,#0d0d2e);border:1px solid #3e2e7e;border-radius:16px;padding:20px;margin-bottom:14px;text-align:center}
+.xp-level-badge{display:inline-block;background:#7c5cfc;color:white;font-size:11px;font-weight:800;padding:4px 14px;border-radius:20px;margin-bottom:10px}
+.xp-total{font-size:32px;font-weight:800;color:#c084fc}
+.xp-label{font-size:11px;color:#7c7c9e;margin-bottom:10px}
+.xp-progress{background:#1e1e2e;border-radius:10px;height:8px;margin-bottom:6px}
+.xp-progress-fill{height:8px;border-radius:10px;background:linear-gradient(90deg,#7c5cfc,#c084fc)}
+.xp-next{font-size:10px;color:#7c7c9e}
+.streak-card{background:#111120;border:1px solid #1e1e2e;border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
+.streak-icon{font-size:28px}
+.streak-n{font-size:22px;font-weight:800;color:#fbbf24}
+.streak-l{font-size:11px;color:#7c7c9e}
+.achieve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.achieve{background:#111120;border:1px solid #1e1e2e;border-radius:10px;padding:12px 6px;text-align:center}
+.achieve.unlocked{border-color:#7c5cfc;background:#1a1030}
+.achieve-icon{font-size:22px;margin-bottom:4px}
+.achieve-name{font-size:9px;color:#7c7c9e;font-weight:600}
+.achieve.unlocked .achieve-name{color:#c084fc}
+
+/* Tips Page */
+.tip-card{background:#111120;border:1px solid #1e1e2e;border-radius:12px;padding:14px;margin-bottom:10px}
+.tip-tag{font-size:9px;letter-spacing:2px;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px}
+.tip-title{font-size:13px;font-weight:700;margin-bottom:6px}
+.tip-body{font-size:12px;color:#a8a8c0;line-height:1.6}
+
+/* Video Recording */
+.video-wrap{position:relative;width:100%;border-radius:14px;overflow:hidden;background:#000;margin-bottom:12px;aspect-ratio:4/3}
+.video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.video-overlay{position:absolute;top:10px;right:10px;display:flex;gap:6px;align-items:center}
+.rec-dot{width:10px;height:10px;background:#f87171;border-radius:50%;animation:pulse 1s infinite}
+.rec-label{font-size:10px;color:#f87171;font-weight:700;background:#0008;padding:3px 8px;border-radius:10px}
+.video-controls{display:flex;gap:8px;margin-bottom:12px}
+.vid-btn{flex:1;padding:11px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all 0.2s;text-align:center}
+.vid-btn-start{background:#0d1a0d;border-color:#4ade80;color:#4ade80}
+.vid-btn-stop{background:#1a0d0d;border-color:#f87171;color:#f87171}
+.vid-btn-play{background:#111120;border-color:#7c5cfc;color:#c084fc}
+.vid-btn-dis{opacity:0.4;cursor:not-allowed}
+.vid-timer{text-align:center;font-size:13px;font-weight:700;color:#f87171;margin-bottom:8px}
+
+/* Resume Analyzer */
+.resume-drop{border:2px dashed #3e2e7e;border-radius:14px;padding:30px 20px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:14px;background:#0d0d1a}
+.resume-drop:hover{border-color:#7c5cfc;background:#1a1030}
+.resume-drop-icon{font-size:36px;margin-bottom:10px}
+.resume-drop-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.resume-drop-sub{font-size:11px;color:#7c7c9e}
+.resume-result{background:#111120;border:1px solid #1e1e2e;border-radius:14px;padding:16px;margin-bottom:12px}
+.skill-chip{display:inline-block;padding:4px 10px;background:#1a1030;border:1px solid #3e2e7e;border-radius:20px;font-size:10px;color:#c084fc;margin:3px}
+.skill-chip.match{background:#0d1a0d;border-color:#1e4e1e;color:#4ade80}
+.skill-chip.miss{background:#1a0d0d;border-color:#4e1e1e;color:#f87171}
+.resume-score-ring{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.resume-score-inner{width:58px;height:58px;background:#0a0a0f;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.resume-score-n{font-size:20px;font-weight:800;color:#c084fc}
+.resume-score-d{font-size:9px;color:#7c7c9e}
+.analyze-section{background:#0d0d1a;border-radius:10px;padding:12px;margin-bottom:10px}
+.analyze-label{font-size:10px;letter-spacing:2px;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px}
+.analyze-text{font-size:12px;color:#a8a8c0;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div id="xp-toast-el" style="display:none" class="xp-toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────
+const LABELS={
+  en:{title:"Crack your",sub:"dream interview",tagline:"AI mock interviews • Real feedback • 50 roles",
+    chooseRole:"⚡ Choose Role",expLevel:"📊 Experience",difficulty:"⚡ Difficulty",
+    companyMode:"🏢 Company Mode",startBtn:"Start Interview 🚀",question:"Question",
+    typeAnswer:"Type your answer here...",submit:"Submit ✓",skip:"Skip",next:"Next →",
+    results:"See Results 🎉",practiceAgain:"Practice Again 🚀",interviewDone:"Interview Done! 🎉",
+    aiFeedback:"AI Feedback",loading:"Generating questions...",timeLeft:"Time left",allCat:"All",
+    home:"Home",history:"History",xpPage:"XP",tips:"Tips",daily:"Daily",resume:"Resume"},
+  hi:{title:"Apna",sub:"sapna interview crack karo",tagline:"AI mock interviews • Asli feedback • 50 roles",
+    chooseRole:"⚡ Role Chuniye",expLevel:"📊 Anubhav",difficulty:"⚡ Kathinai",
+    companyMode:"🏢 Company Mode",startBtn:"Interview Shuru Karein 🚀",question:"Prashn",
+    typeAnswer:"Yahan uttar likhein...",submit:"Jama Karein ✓",skip:"Chhod Dein",next:"Agla →",
+    results:"Parinam Dekhein 🎉",practiceAgain:"Phir Abhyas Karein 🚀",interviewDone:"Interview Poora! 🎉",
+    aiFeedback:"AI Pratikriya",loading:"Prashn ban rahe hain...",timeLeft:"Samay bacha",allCat:"Sab",
+    home:"Ghar",history:"Itihaas",xpPage:"XP",tips:"Sujhaav",daily:"Aaj",resume:"Resume"},
+  hing:{title:"Apna",sub:"dream interview crack karo",tagline:"AI mock interviews • Real feedback • 50 roles",
+    chooseRole:"⚡ Role Choose Karo",expLevel:"📊 Experience",difficulty:"⚡ Difficulty",
+    companyMode:"🏢 Company Mode",startBtn:"Interview Start Karo 🚀",question:"Question",
+    typeAnswer:"Yahan answer likho...",submit:"Submit Karo ✓",skip:"Skip Karo",next:"Agla →",
+    results:"Results Dekho 🎉",practiceAgain:"Phir Practice Karo 🚀",interviewDone:"Interview Ho Gaya! 🎉",
+    aiFeedback:"AI Feedback",loading:"Questions ban rahe hain...",timeLeft:"Time bacha",allCat:"Sab",
+    home:"Home",history:"History",xpPage:"XP",tips:"Tips",daily:"Daily",resume:"Resume"}
+};
+
+const COMPANIES=[
+  {id:"none",icon:"🎯",name:"General"},
+  {id:"google",icon:"🔵",name:"Google"},
+  {id:"microsoft",icon:"🟦",name:"Microsoft"},
+  {id:"amazon",icon:"🟠",name:"Amazon"},
+  {id:"meta",icon:"🔷",name:"Meta"},
+  {id:"tcs",icon:"🇮🇳",name:"TCS"},
+  {id:"infosys",icon:"💼",name:"Infosys"},
+  {id:"wipro",icon:"🌐",name:"Wipro"},
+  {id:"zomato",icon:"🍕",name:"Zomato"},
+  {id:"flipkart",icon:"🛒",name:"Flipkart"},
+  {id:"paytm",icon:"💳",name:"Paytm"},
+  {id:"swiggy",icon:"🛵",name:"Swiggy"},
+  {id:"startup",icon:"🚀",name:"Startup"}
+];
+
+const CATEGORIES=[
+  {id:"tech",name:"💻 Tech"},{id:"data",name:"📊 Data"},
+  {id:"cloud",name:"☁️ Cloud"},{id:"design",name:"🎨 Design"},
+  {id:"mgmt",name:"📋 Mgmt"},{id:"biz",name:"💼 Biz"},
+  {id:"mktg",name:"📣 Mktg"},{id:"security",name:"🔐 Security"},
+  {id:"mobile",name:"📱 Mobile"},{id:"hr",name:"🤝 HR"}
+];
+
+const ROLES=[
+  {id:"fe",icon:"💻",name:"Frontend Dev",qs:12,cat:"tech"},
+  {id:"be",icon:"⚙️",name:"Backend Dev",qs:12,cat:"tech"},
+  {id:"fs",icon:"🖥️",name:"Full Stack",qs:12,cat:"tech"},
+  {id:"rn",icon:"⚛️",name:"React Dev",qs:12,cat:"tech"},
+  {id:"nd",icon:"🟩",name:"Node.js Dev",qs:12,cat:"tech"},
+  {id:"da",icon:"📊",name:"Data Analyst",qs:12,cat:"data"},
+  {id:"ds",icon:"🔬",name:"Data Scientist",qs:12,cat:"data"},
+  {id:"ml",icon:"🤖",name:"ML Engineer",qs:12,cat:"data"},
+  {id:"ai",icon:"🧠",name:"AI Scientist",qs:12,cat:"data"},
+  {id:"de",icon:"🔄",name:"Data Engineer",qs:12,cat:"data"},
+  {id:"do",icon:"🔧",name:"DevOps",qs:12,cat:"cloud"},
+  {id:"cl",icon:"☁️",name:"Cloud Architect",qs:12,cat:"cloud"},
+  {id:"sr",icon:"🛡️",name:"SRE",qs:12,cat:"cloud"},
+  {id:"kn",icon:"🐳",name:"Kubernetes Eng",qs:12,cat:"cloud"},
+  {id:"tf",icon:"🏗️",name:"Terraform Dev",qs:12,cat:"cloud"},
+  {id:"ui",icon:"🎨",name:"UI/UX Designer",qs:10,cat:"design"},
+  {id:"gd",icon:"✏️",name:"Graphic Designer",qs:10,cat:"design"},
+  {id:"vd",icon:"🎬",name:"Video Editor",qs:10,cat:"design"},
+  {id:"md",icon:"🖼️",name:"Motion Designer",qs:10,cat:"design"},
+  {id:"px",icon:"🎯",name:"Product Designer",qs:10,cat:"design"},
+  {id:"pm",icon:"📋",name:"Product Manager",qs:10,cat:"mgmt"},
+  {id:"pj",icon:"🗂️",name:"Project Manager",qs:10,cat:"mgmt"},
+  {id:"sc",icon:"🔁",name:"Scrum Master",qs:10,cat:"mgmt"},
+  {id:"em",icon:"👨‍💼",name:"Eng Manager",qs:10,cat:"mgmt"},
+  {id:"cto",icon:"🏛️",name:"CTO",qs:10,cat:"mgmt"},
+  {id:"ba",icon:"📈",name:"Business Analyst",qs:10,cat:"biz"},
+  {id:"fi",icon:"💰",name:"Finance Analyst",qs:10,cat:"biz"},
+  {id:"ca",icon:"🧾",name:"CA / Accountant",qs:10,cat:"biz"},
+  {id:"bdev",icon:"🤝",name:"Biz Dev",qs:10,cat:"biz"},
+  {id:"cons",icon:"💡",name:"Consultant",qs:10,cat:"biz"},
+  {id:"mk",icon:"📣",name:"Digital Marketer",qs:10,cat:"mktg"},
+  {id:"sp",icon:"🔍",name:"SEO Specialist",qs:10,cat:"mktg"},
+  {id:"sl",icon:"🎯",name:"Sales Executive",qs:10,cat:"mktg"},
+  {id:"cm",icon:"📱",name:"Social Media Mgr",qs:10,cat:"mktg"},
+  {id:"cw",icon:"📝",name:"Content Writer",qs:10,cat:"mktg"},
+  {id:"cy",icon:"🔐",name:"Cybersecurity",qs:12,cat:"security"},
+  {id:"bc",icon:"⛓️",name:"Blockchain Dev",qs:12,cat:"security"},
+  {id:"pen",icon:"🕵️",name:"Penetration Tester",qs:12,cat:"security"},
+  {id:"soc",icon:"🛡️",name:"SOC Analyst",qs:12,cat:"security"},
+  {id:"web3",icon:"🌐",name:"Web3 Developer",qs:12,cat:"security"},
+  {id:"mo",icon:"📱",name:"Mobile Dev",qs:12,cat:"mobile"},
+  {id:"and",icon:"🤖",name:"Android Dev",qs:12,cat:"mobile"},
+  {id:"ios",icon:"🍎",name:"iOS Dev",qs:12,cat:"mobile"},
+  {id:"fl",icon:"💙",name:"Flutter Dev",qs:12,cat:"mobile"},
+  {id:"gm",icon:"🎮",name:"Game Dev",qs:12,cat:"mobile"},
+  {id:"hr",icon:"🤝",name:"HR Manager",qs:10,cat:"hr"},
+  {id:"ta",icon:"🎯",name:"Talent Acquisition",qs:10,cat:"hr"},
+  {id:"ops",icon:"⚙️",name:"Operations Mgr",qs:10,cat:"hr"},
+  {id:"qa",icon:"🧪",name:"QA Engineer",qs:10,cat:"hr"},
+  {id:"cs",icon:"💬",name:"Customer Success",qs:10,cat:"hr"}
+];
+
+const TIMER_SECS={Easy:180,Medium:120,Hard:90};
+const GRADES=[
+  {min:9,e:"🏆",l:"Outstanding",c:"#fbbf24",desc:"World-class performance!"},
+  {min:7,e:"⭐",l:"Excellent",c:"#10b981",desc:"Great job, keep it up!"},
+  {min:5,e:"👍",l:"Good",c:"#06b6d4",desc:"Solid effort, room to grow."},
+  {min:3,e:"💪",l:"Keep Practicing",c:"#f87171",desc:"Practice makes perfect!"},
+  {min:0,e:"🌱",l:"Just Starting",c:"#a78bfa",desc:"Everyone starts somewhere!"}
+];
+
+const XP_LEVELS=[
+  {level:1,name:"Rookie",xpNeeded:0},
+  {level:2,name:"Learner",xpNeeded:100},
+  {level:3,name:"Skilled",xpNeeded:300},
+  {level:4,name:"Expert",xpNeeded:600},
+  {level:5,name:"Master",xpNeeded:1000},
+  {level:6,name:"Legend",xpNeeded:1500}
+];
+
+const ACHIEVEMENTS=[
+  {id:"first",icon:"🎯",name:"First Interview"},
+  {id:"streak3",icon:"🔥",name:"3-Day Streak"},
+  {id:"perfect",icon:"💯",name:"Perfect Score"},
+  {id:"ten",icon:"🏅",name:"10 Interviews"},
+  {id:"hard",icon:"💪",name:"Hard Mode"},
+  {id:"allcat",icon:"🌟",name:"All Categories"}
+];
+
+const DAILY_CHALLENGES=[
+  {title:"Speed Round",desc:"Complete 3 questions in Hard mode",xp:50,role:"fe",diff:"Hard"},
+  {title:"Behavioral Focus",desc:"Answer 5 HR questions perfectly",xp:40,role:"hr",diff:"Medium"},
+  {title:"Tech Deep Dive",desc:"Ace a Full Stack interview",xp:60,role:"fs",diff:"Hard"},
+  {title:"Quick Practice",desc:"Complete any Easy interview",xp:20,role:null,diff:"Easy"},
+  {title:"Company Prep",desc:"Do a Google-style interview",xp:70,role:"fs",diff:"Hard"}
+];
+
+const TIPS=[
+  {tag:"STAR Method",title:"Structure your answers perfectly",body:"Use Situation, Task, Action, Result format. Start with context, explain your role, describe what you did, and share the outcome with numbers."},
+  {tag:"Research",title:"Know the company inside out",body:"Study the company's products, recent news, culture, and values. Mention specific projects or achievements that align with the role."},
+  {tag:"Body Language",title:"Confidence is key",body:"Sit straight, maintain eye contact, smile naturally. Practice in front of a mirror. Your body language speaks before you do."},
+  {tag:"Questions to Ask",title:"Always ask smart questions",body:"Ask about team culture, growth opportunities, day-to-day responsibilities, and success metrics. It shows genuine interest."},
+  {tag:"Salary Negotiation",title:"Know your worth",body:"Research market rates on Glassdoor and LinkedIn. Give a range, not a single number. Always negotiate — companies expect it."},
+  {tag:"Technical Prep",title:"Code daily for tech roles",body:"Solve 1-2 LeetCode problems daily. Focus on arrays, strings, trees, and dynamic programming. Practice explaining your thought process aloud."},
+  {tag:"Common Mistakes",title:"What NOT to do",body:"Don't badmouth previous employers. Don't say 'I don't know' without trying. Don't forget to ask questions. Don't lie about experience."},
+  {tag:"Follow Up",title:"Send a thank-you email",body:"Within 24 hours, email your interviewer thanking them. Mention something specific from the conversation. It sets you apart from 90% of candidates."}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+function loadStorage(){
+  try{
+    return {
+      history: JSON.parse(localStorage.getItem('mockai_history')||'[]'),
+      xp: parseInt(localStorage.getItem('mockai_xp')||'0'),
+      streak: parseInt(localStorage.getItem('mockai_streak')||'0'),
+      lastDate: localStorage.getItem('mockai_lastdate')||'',
+      achievements: JSON.parse(localStorage.getItem('mockai_achieve')||'[]'),
+      dailyDone: localStorage.getItem('mockai_daily')===new Date().toDateString()
+    };
+  }catch(e){ return {history:[],xp:0,streak:0,lastDate:'',achievements:[],dailyDone:false}; }
+}
+function saveStorage(){
+  try{
+    localStorage.setItem('mockai_history',JSON.stringify(stored.history));
+    localStorage.setItem('mockai_xp',stored.xp);
+    localStorage.setItem('mockai_streak',stored.streak);
+    localStorage.setItem('mockai_lastdate',stored.lastDate);
+    localStorage.setItem('mockai_achieve',JSON.stringify(stored.achievements));
+  }catch(e){}
+}
+
+let stored = loadStorage();
+let state={
+  page:"home",tab:"home",role:null,level:"Mid-level",
+  difficulty:"Medium",lang:"en",cat:"all",company:"none",
+  questions:[],current:0,answer:"",
+  feedback:null,results:[],total:0,
+  loading:false,timerSec:0,timerMax:0,timerInterval:null,
+  recognition:null,listening:false,isDaily:false,
+  // Video
+  videoStream:null,mediaRecorder:null,videoChunks:[],
+  isRecording:false,recordedBlob:null,videoSeconds:0,videoInterval:null,
+  // Resume
+  resumeText:"",resumeAnalysis:null,resumeLoading:false
+};
+
+const todayChallenge = DAILY_CHALLENGES[new Date().getDay()%DAILY_CHALLENGES.length];
+
+function L(k){ return LABELS[state.lang][k]||LABELS.en[k]; }
+
+// ── XP HELPERS ────────────────────────────────────────────────────
+function getLevel(xp){
+  let lvl=XP_LEVELS[0];
+  for(const l of XP_LEVELS){ if(xp>=l.xpNeeded) lvl=l; }
+  return lvl;
+}
+function getNextLevel(xp){
+  for(const l of XP_LEVELS){ if(xp<l.xpNeeded) return l; }
+  return null;
+}
+function addXP(amount,reason){
+  stored.xp+=amount;
+  saveStorage();
+  showXPToast(`+${amount} XP — ${reason}`);
+}
+function showXPToast(msg){
+  const el=document.getElementById('xp-toast-el');
+  if(!el) return;
+  el.textContent=msg; el.style.display='block';
+  setTimeout(()=>{ el.style.display='none'; },2000);
+}
+function updateStreak(){
+  const today=new Date().toDateString();
+  const yesterday=new Date(Date.now()-86400000).toDateString();
+  if(stored.lastDate===yesterday){ stored.streak++; }
+  else if(stored.lastDate!==today){ stored.streak=1; }
+  stored.lastDate=today;
+  saveStorage();
+}
+function unlockAchievement(id){
+  if(!stored.achievements.includes(id)){
+    stored.achievements.push(id);
+    saveStorage();
+    const a=ACHIEVEMENTS.find(x=>x.id===id);
+    if(a) showXPToast(`🏅 Achievement: ${a.name}`);
+  }
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function r(){
+  const a=document.getElementById('app');
+  if(!a) return;
+  const lvl=getLevel(stored.xp);
+  const nextLvl=getNextLevel(stored.xp);
+  const pct=nextLvl?Math.min(100,((stored.xp-lvl.xpNeeded)/(nextLvl.xpNeeded-lvl.xpNeeded))*100):100;
+
+  if(state.page==='interview'){ a.innerHTML=interviewHTML(); bindEvents(); return; }
+  if(state.page==='results'){ a.innerHTML=resultsHTML(); return; }
+
+  let content='';
+  if(state.tab==='home') content=homeHTML();
+  else if(state.tab==='history') content=historyHTML();
+  else if(state.tab==='xp') content=xpHTML();
+  else if(state.tab==='tips') content=tipsHTML();
+  else if(state.tab==='resume') content=resumeHTML();
+
+  a.innerHTML=`
+  <div class="nav">
+    <div style="display:flex;align-items:center;gap:8px">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="36" height="36"><defs><linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#7c5cfc"/><stop offset="100%" style="stop-color:#c084fc"/></linearGradient><linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.15"/><stop offset="100%" style="stop-color:#ffffff;stop-opacity:0"/></linearGradient><linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#f59e0b"/><stop offset="100%" style="stop-color:#fcd34d"/></linearGradient></defs><circle cx="100" cy="100" r="97" fill="url(#bg)"/><circle cx="100" cy="100" r="97" fill="url(#shine)"/><circle cx="100" cy="58" r="20" fill="#fde68a"/><ellipse cx="100" cy="42" rx="20" ry="9" fill="#1a0a0a"/><circle cx="93" cy="57" r="2.5" fill="#1a0a2e"/><circle cx="107" cy="57" r="2.5" fill="#1a0a2e"/><path d="M93 65 Q100 70 107 65" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round"/><path d="M80 78 Q100 72 120 78 L120 105 Q100 110 80 105 Z" fill="#1e3a5f"/><polygon points="100,76 104,76 102,100 100,104 98,100" fill="url(#gold)"/><path d="M92 76 L100 84 L108 76" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="118" y="88" width="10" height="18" rx="5" fill="white"/><rect x="115" y="103" width="16" height="4" rx="2" fill="#c084fc"/><line x1="123" y1="107" x2="123" y2="114" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="118" y1="114" x2="128" y2="114" stroke="white" stroke-width="2" stroke-linecap="round"/><rect x="54" y="30" width="58" height="28" rx="10" fill="white" opacity="0.95"/><polygon points="72,58 62,68 82,58" fill="white" opacity="0.95"/><text x="83" y="44" text-anchor="middle" font-family="Arial,sans-serif" font-size="7.5" fill="#7c5cfc" font-weight="700">Tell me</text><text x="83" y="54" text-anchor="middle" font-family="Arial,sans-serif" font-size="7.5" fill="#7c5cfc" font-weight="700">yourself!</text><text x="100" y="148" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="28" font-weight="900"><tspan fill="white">Mock</tspan><tspan fill="url(#gold)">AI</tspan></text><text x="100" y="185" text-anchor="middle" font-size="11" fill="#fcd34d">★★★★★</text></svg>
+      <div class="logo">Mock<span>AI</span></div>
+    </div>
+    <div style="text-align:right">
+      <div class="xp-info">${lvl.name} • ${stored.xp} XP</div>
+      <div class="xp-bar-wrap"><div class="xp-bar-fill" style="width:${pct}%"></div></div>
+    </div>
+  </div>
+  ${content}
+  <div class="bnav">
+    <div class="bnav-btn${state.tab==='home'?' act':''}" onclick="setTab('home')"><span class="bnav-icon">🏠</span>${L('home')}</div>
+    <div class="bnav-btn${state.tab==='history'?' act':''}" onclick="setTab('history')"><span class="bnav-icon">📋</span>${L('history')}</div>
+    <div class="bnav-btn${state.tab==='xp'?' act':''}" onclick="setTab('xp')"><span class="bnav-icon">⚡</span>${L('xpPage')}</div>
+    <div class="bnav-btn${state.tab==='tips'?' act':''}" onclick="setTab('tips')"><span class="bnav-icon">💡</span>${L('tips')}</div>
+    <div class="bnav-btn${state.tab==='resume'?' act':''}" onclick="setTab('resume')"><span class="bnav-icon">📄</span>${L('resume')}</div>
+  </div>`;
+  bindEvents();
+}
+
+function homeHTML(){
+  const filtered=state.cat==='all'?ROLES:ROLES.filter(x=>x.cat===state.cat);
+  return `
+  <div style="padding-bottom:70px">
+  <div class="hero">
+    <h1>${L('title')}<br><em>${L('sub')}</em></h1>
+    <p>${L('tagline')}</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-n">50</div><div class="stat-l">Roles</div></div>
+      <div class="stat"><div class="stat-n">10</div><div class="stat-l">Categories</div></div>
+      <div class="stat"><div class="stat-n">${stored.history.length}</div><div class="stat-l">Done</div></div>
+      <div class="stat"><div class="stat-n">${stored.streak}🔥</div><div class="stat-l">Streak</div></div>
+    </div>
+  </div>
+
+  ${!stored.dailyDone?`
+  <div class="dc-banner" onclick="startDaily()">
+    <div class="dc-left">
+      <div class="dc-tag">⚡ Daily Challenge</div>
+      <div class="dc-title">${todayChallenge.title}</div>
+      <div class="dc-sub">${todayChallenge.desc}</div>
+    </div>
+    <div class="dc-xp">+${todayChallenge.xp} XP</div>
+  </div>`:`
+  <div class="dc-banner" style="opacity:0.5">
+    <div class="dc-left">
+      <div class="dc-tag">✅ Completed</div>
+      <div class="dc-title">${todayChallenge.title}</div>
+      <div class="dc-sub">Come back tomorrow!</div>
+    </div>
+    <div class="dc-xp" style="background:#333">Done</div>
+  </div>`}
+
+  <div class="section">
+    <h2>🌐 Language</h2>
+    <div class="lang-tabs">
+      <div class="lang-tab${state.lang==='en'?' sel':''}" onclick="setLang('en')">🇬🇧 English</div>
+      <div class="lang-tab${state.lang==='hing'?' sel':''}" onclick="setLang('hing')">🇮🇳 Hinglish</div>
+      <div class="lang-tab${state.lang==='hi'?' sel':''}" onclick="setLang('hi')">हि Hindi</div>
+    </div>
+
+    <h2>${L('chooseRole')}</h2>
+    <div class="cat-scroll">
+      <div class="cat-btn${state.cat==='all'?' sel':''}" onclick="setCat('all')">${L('allCat')}</div>
+      ${CATEGORIES.map(c=>`<div class="cat-btn${state.cat===c.id?' sel':''}" onclick="setCat('${c.id}')">${c.name}</div>`).join('')}
+    </div>
+    <div class="grid">
+      ${filtered.map(role=>`<div class="card${state.role&&state.role.id===role.id?' sel':''}" onclick="selectRole('${role.id}')"><div class="icon">${role.icon}</div><div class="name">${role.name}</div></div>`).join('')}
+    </div>
+
+    ${state.role?`
+    <h2>${L('expLevel')}</h2>
+    <div class="levels">
+      <div class="lvl${state.level==='Fresher'?' sel':''}" onclick="setLevel('Fresher')">Fresher</div>
+      <div class="lvl${state.level==='Mid-level'?' sel':''}" onclick="setLevel('Mid-level')">Mid-level</div>
+      <div class="lvl${state.level==='Senior'?' sel':''}" onclick="setLevel('Senior')">Senior</div>
+    </div>
+    <h2>${L('difficulty')}</h2>
+    <div class="diff-row">
+      <div class="diff diff-easy${state.difficulty==='Easy'?' sel':''}" onclick="setDiff('Easy')">🟢 Easy<br><span style="font-size:9px;font-weight:400">3 min/Q</span></div>
+      <div class="diff diff-med${state.difficulty==='Medium'?' sel':''}" onclick="setDiff('Medium')">🟡 Medium<br><span style="font-size:9px;font-weight:400">2 min/Q</span></div>
+      <div class="diff diff-hard${state.difficulty==='Hard'?' sel':''}" onclick="setDiff('Hard')">🔴 Hard<br><span style="font-size:9px;font-weight:400">90 sec/Q</span></div>
+    </div>
+    <h2>${L('companyMode')}</h2>
+    <div class="company-scroll">
+      ${COMPANIES.map(c=>`<div class="co-card${state.company===c.id?' sel':''}" onclick="setCompany('${c.id}')"><div class="co-icon">${c.icon}</div><div class="co-name">${c.name}</div></div>`).join('')}
+    </div>
+    <div class="info">
+      <span>${state.role.icon} ${state.role.name} • ${state.level}</span>
+      <span class="info-v">${state.role.qs} Qs</span>
+    </div>
+    <button class="btn" onclick="startInterview()">${L('startBtn')}</button>
+    `:''}
+  </div></div>`;
+}
+
+function interviewHTML(){
+  if(state.loading&&!state.questions.length) return `
+    <div class="nav"><div class="logo">Mock<span>AI</span></div></div>
+    <div class="qa">
+      <div class="qa-n">${L('loading')}</div>
+      <div style="padding:20px 0">
+        <span class="dot"></span> <span class="dot dot2"></span> <span class="dot dot3"></span>
+        <span style="margin-left:8px;color:#7c7c9e;font-size:13px">${L('loading')}</span>
+      </div>
+    </div>`;
+
+  const pct=state.timerMax?state.timerSec/state.timerMax:1;
+  const mins=Math.floor(state.timerSec/60);
+  const secs=state.timerSec%60;
+  const timeStr=`${mins}:${secs.toString().padStart(2,'0')}`;
+  const diffBadge=`<span class="badge badge-${state.difficulty.toLowerCase()}">${state.difficulty}</span>`;
+  const co=COMPANIES.find(x=>x.id===state.company);
+  const coTag=co&&co.id!=='none'?`<span style="font-size:10px;color:#7c7c9e"> • ${co.icon}${co.name}</span>`:'';
+
+  if(state.feedback) return `
+    <div class="nav"><div class="logo">Mock<span>AI</span></div><div style="font-size:11px;color:#7c7c9e">${state.current+1}/${state.questions.length}</div></div>
+    <div class="qa">
+      <div class="qa-n">${L('question')} ${state.current+1}${diffBadge}${coTag}</div>
+      <div class="qa-q">${state.questions[state.current]}</div>
+      <div class="fb">
+        <div class="fb-t"><div class="fb-l">${L('aiFeedback')}</div><div class="fb-s">${state.feedback.score}/10</div></div>
+        <div class="fb-txt">${state.feedback.feedback}</div>
+      </div>
+      <button class="btn" onclick="nextQ()">${state.current+1>=state.questions.length?L('results'):L('next')}</button>
+    </div>`;
+
+  return `
+    <div class="nav"><div class="logo">Mock<span>AI</span></div><div style="font-size:11px;color:#7c7c9e">${state.current+1}/${state.questions.length}</div></div>
+    <div class="qa">
+      <div class="qa-n">${L('question')} ${state.current+1}${diffBadge}${coTag}</div>
+      <div class="timer-txt" style="color:${timerColor(pct)}">${L('timeLeft')}: ${timeStr}</div>
+      <div class="timer-bar"><div class="timer-fill" style="width:${pct*100}%;background:${timerColor(pct)}"></div></div>
+      <div class="qa-q">${state.questions[state.current]||'Loading...'}</div>
+
+      ${state.videoStream?`
+      <div class="video-wrap">
+        <video id="live-video" autoplay muted playsinline style="width:100%;border-radius:14px"></video>
+        ${state.isRecording?`<div class="video-overlay"><div class="rec-dot"></div><div class="rec-label">REC ${Math.floor(state.videoSeconds/60)}:${(state.videoSeconds%60).toString().padStart(2,'0')}</div></div>`:''}
+      </div>
+      <div class="video-controls">
+        ${!state.isRecording
+          ?`<div class="vid-btn vid-btn-start" onclick="startRecording()">🔴 Record</div>`
+          :`<div class="vid-btn vid-btn-stop" onclick="stopRecording()">⏹ Stop</div>`}
+        ${state.recordedBlob
+          ?`<div class="vid-btn vid-btn-play" onclick="playRecording()">▶ Replay</div>`
+          :`<div class="vid-btn vid-btn-play vid-btn-dis">▶ Replay</div>`}
+        <div class="vid-btn" style="background:#1a0d0d;border-color:#f87171;color:#f87171" onclick="stopCamera()">✕ Off</div>
+      </div>`:`
+      <div class="video-controls">
+        <div class="vid-btn vid-btn-start" onclick="startCamera()">📹 Camera On</div>
+      </div>`}
+
+      <textarea class="ta" id="ans" placeholder="${L('typeAnswer')}">${state.answer}</textarea>
+      <div style="display:flex;gap:8px">
+        <button class="btn" style="flex:1" onclick="submitAns()" ${state.loading||!state.questions.length?'disabled':''}>${L('submit')}</button>
+        <button class="voice-btn${state.listening?' listening':''}" id="voice-btn" onclick="toggleVoice()" title="Voice Input">🎤</button>
+        <button onclick="skipQ()" style="padding:14px 12px;background:#111120;border:1.5px solid #1e1e2e;border-radius:10px;color:#7c7c9e;cursor:pointer">${L('skip')}</button>
+      </div>
+    </div>`;
+}
+
+function resultsHTML(){
+  const avg=state.results.length?Math.round(state.total/state.results.length):0;
+  const g=GRADES.find(x=>avg>=x.min)||GRADES[GRADES.length-1];
+  const answered=state.results.filter(x=>x.a!=='(Skipped)').length;
+  const xpEarned=Math.round(avg*10+(state.difficulty==='Hard'?30:state.difficulty==='Medium'?15:0));
+  return `
+  <div class="nav"><div class="logo">Mock<span>AI</span></div></div>
+  <div class="res">
+    <h2>${L('interviewDone')}</h2>
+    <div class="res-s">${state.role.icon} ${state.role.name} • ${state.level} • ${state.difficulty}</div>
+    <div class="ring" style="background:conic-gradient(#7c5cfc ${avg*36}deg,#1e1e2e ${avg*36}deg)">
+      <div class="ring-in"><div class="ring-n">${avg}</div><div class="ring-d">/ 10</div></div>
+    </div>
+    <div class="grade">
+      <div class="grade-e">${g.e}</div>
+      <div class="grade-l" style="color:${g.c}">${g.l}</div>
+      <div class="grade-desc">${g.desc}</div>
+    </div>
+    <div style="background:#1a1030;border:1px solid #3e2e7e;border-radius:12px;padding:12px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:#c084fc;margin-bottom:4px">+${xpEarned} XP Earned! ⚡</div>
+      <div style="font-size:11px;color:#7c7c9e">${answered} answered • ${state.results.length-answered} skipped • Avg ${avg}/10</div>
+    </div>
+    ${state.results.map((res,i)=>`
+      <div class="qa-res">
+        <div class="qa-res-q">Q${i+1}: ${res.q}</div>
+        <div class="qa-res-a">${res.a.length>60?res.a.slice(0,60)+'...':res.a}</div>
+        <div class="qa-res-s">Score: ${res.score}/10 • ${res.feedback}</div>
+      </div>`).join('')}
+    <button class="btn" style="margin-top:16px" onclick="restart()">${L('practiceAgain')}</button>
+  </div>`;
+}
+
+function historyHTML(){
+  if(!stored.history.length) return `
+    <div style="padding-bottom:70px">
+    <div class="section" style="padding-top:16px">
+      <h2>📋 Interview History</h2>
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:6px">No interviews yet</div>
+        <div style="font-size:12px">Complete your first interview to see history here!</div>
+      </div>
+    </div></div>`;
+  return `
+    <div style="padding-bottom:70px">
+    <div class="section" style="padding-top:16px">
+      <h2>📋 Interview History (${stored.history.length})</h2>
+      ${[...stored.history].reverse().map((h,i)=>{
+        const g=GRADES.find(x=>h.avg>=x.min)||GRADES[GRADES.length-1];
+        return `<div class="hist-card">
+          <div class="hist-top">
+            <div class="hist-role">${h.roleIcon} ${h.roleName}</div>
+            <div class="hist-score">${h.avg}/10 ${g.e}</div>
+          </div>
+          <div class="hist-meta">${h.level} • ${h.difficulty} • ${h.company!=='none'?h.company+' • ':''}${h.answered}/${h.total} answered • ${h.date}</div>
+          <div class="hist-bar"><div class="hist-bar-fill" style="width:${h.avg*10}%"></div></div>
+        </div>`;
+      }).join('')}
+      <button class="btn-outline" onclick="if(confirm('Clear all history?')){stored.history=[];saveStorage();r()}">🗑️ Clear History</button>
+    </div></div>`;
+}
+
+function xpHTML(){
+  const lvl=getLevel(stored.xp);
+  const next=getNextLevel(stored.xp);
+  const pct=next?Math.min(100,((stored.xp-lvl.xpNeeded)/(next.xpNeeded-lvl.xpNeeded))*100):100;
+  return `
+    <div style="padding-bottom:70px">
+    <div class="section" style="padding-top:16px">
+      <h2>⚡ Your Progress</h2>
+      <div class="xp-card">
+        <div class="xp-level-badge">Level ${lvl.level} — ${lvl.name}</div>
+        <div class="xp-total">${stored.xp}</div>
+        <div class="xp-label">Total XP</div>
+        <div class="xp-progress"><div class="xp-progress-fill" style="width:${pct}%"></div></div>
+        <div class="xp-next">${next?`${next.xpNeeded-stored.xp} XP to Level ${next.level} (${next.name})`:'Max Level Reached! 🏆'}</div>
+      </div>
+      <div class="streak-card">
+        <div class="streak-icon">🔥</div>
+        <div><div class="streak-n">${stored.streak}</div><div class="streak-l">Day Streak</div></div>
+        <div style="margin-left:auto;font-size:11px;color:#7c7c9e">Practice daily<br>to keep streak!</div>
+      </div>
+      <h2>🏅 Achievements</h2>
+      <div class="achieve-grid">
+        ${ACHIEVEMENTS.map(a=>`
+          <div class="achieve${stored.achievements.includes(a.id)?' unlocked':''}">
+            <div class="achieve-icon">${stored.achievements.includes(a.id)?a.icon:'🔒'}</div>
+            <div class="achieve-name">${a.name}</div>
+          </div>`).join('')}
+      </div>
+      <h2>📊 Stats</h2>
+      <div class="hist-card">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><div style="font-size:20px;font-weight:800;color:#c084fc">${stored.history.length}</div><div style="font-size:10px;color:#7c7c9e">Interviews Done</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#4ade80">${stored.history.length?Math.round(stored.history.reduce((s,h)=>s+h.avg,0)/stored.history.length):0}/10</div><div style="font-size:10px;color:#7c7c9e">Avg Score</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#fbbf24">${stored.streak}</div><div style="font-size:10px;color:#7c7c9e">Day Streak</div></div>
+          <div><div style="font-size:20px;font-weight:800;color:#f87171">${stored.achievements.length}</div><div style="font-size:10px;color:#7c7c9e">Achievements</div></div>
+        </div>
+      </div>
+    </div></div>`;
+}
+
+function tipsHTML(){
+  return `
+    <div style="padding-bottom:70px">
+    <div class="section" style="padding-top:16px">
+      <h2>💡 Interview Tips</h2>
+      ${TIPS.map(t=>`
+        <div class="tip-card">
+          <div class="tip-tag">${t.tag}</div>
+          <div class="tip-title">${t.title}</div>
+          <div class="tip-body">${t.body}</div>
+        </div>`).join('')}
+    </div></div>`;
+}
+
+// ── EVENTS ────────────────────────────────────────────────────────
+function bindEvents(){
+  document.querySelectorAll('textarea').forEach(t=>{
+    t.addEventListener('input',function(){ state.answer=this.value; });
+  });
+}
+function setTab(t){ state.tab=t; r(); }
+function setLang(l){ state.lang=l; r(); }
+function setCat(c){ state.cat=c; r(); }
+function selectRole(id){ state.role=ROLES.find(x=>x.id===id); r(); }
+function setLevel(l){ state.level=l; r(); }
+function setDiff(d){ state.difficulty=d; r(); }
+function setCompany(c){ state.company=c; r(); }
+function timerColor(p){ return p>0.5?'#4ade80':p>0.25?'#fbbf24':'#f87171'; }
+
+// Voice Input
+function toggleVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ alert('Voice input not supported in this browser. Try Chrome!'); return; }
+  if(state.listening){
+    if(state.recognition) state.recognition.stop();
+    state.listening=false; r(); return;
+  }
+  const rec=new SR();
+  rec.lang=state.lang==='hi'?'hi-IN':'en-IN';
+  rec.continuous=true; rec.interimResults=true;
+  rec.onresult=e=>{
+    let txt='';
+    for(let i=0;i<e.results.length;i++) txt+=e.results[i][0].transcript;
+    state.answer=txt;
+    const ta=document.getElementById('ans');
+    if(ta) ta.value=txt;
+  };
+  rec.onerror=()=>{ state.listening=false; r(); };
+  rec.onend=()=>{ state.listening=false; r(); };
+  rec.start();
+  state.recognition=rec; state.listening=true; r();
+}
+
+// Timer
+function startTimer(){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  state.timerMax=TIMER_SECS[state.difficulty];
+  state.timerSec=state.timerMax;
+  state.timerInterval=setInterval(()=>{
+    state.timerSec--;
+    if(state.timerSec<=0){ clearInterval(state.timerInterval); autoSubmit(); }
+    else{
+      const fill=document.querySelector('.timer-fill');
+      const txt=document.querySelector('.timer-txt');
+      if(fill){
+        const pct=state.timerSec/state.timerMax;
+        fill.style.width=(pct*100)+'%';
+        fill.style.background=timerColor(pct);
+        if(txt){
+          const m=Math.floor(state.timerSec/60),s=state.timerSec%60;
+          txt.textContent=`${L('timeLeft')}: ${m}:${s.toString().padStart(2,'0')}`;
+          txt.style.color=timerColor(pct);
+        }
+      }
+    }
+  },1000);
+}
+async function autoSubmit(){
+  const ans=document.getElementById('ans')?.value||state.answer||'(No answer — time up)';
+  state.answer=ans; await doSubmit(ans);
+}
+
+// Daily Challenge
+function startDaily(){
+  const ch=todayChallenge;
+  if(ch.role){
+    state.role=ROLES.find(x=>x.id===ch.role)||ROLES[0];
+  } else {
+    state.role=ROLES[Math.floor(Math.random()*ROLES.length)];
+  }
+  state.difficulty=ch.diff;
+  state.level='Mid-level';
+  state.company='none';
+  state.isDaily=true;
+  startInterview();
+}
+
+// Start Interview
+async function startInterview(){
+  state.loading=true; state.page='interview';
+  state.questions=[]; state.current=0;
+  state.results=[]; state.total=0;
+  state.answer=''; state.feedback=null;
+  r();
+  const langInstr=state.lang==='hi'?'Generate questions in Hindi.':state.lang==='hing'?'Generate questions in Hinglish (Hindi+English mix).':'Generate questions in English.';
+  const co=COMPANIES.find(x=>x.id===state.company);
+  const coCtx=co&&co.id!=='none'?` specifically for a ${co.name} style interview (focus on their culture, values, and typical question style)`:'';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:1000,
+        system:`Expert interviewer. Return ONLY a JSON array of ${state.role.qs} question strings. No markdown. ${langInstr}`,
+        messages:[{role:'user',content:`Generate exactly ${state.role.qs} ${state.difficulty} level ${state.level} interview questions for ${state.role.name} role${coCtx}. Mix: 40% technical, 30% behavioral, 20% problem-solving, 10% culture fit.`}]
+      })
+    });
+    const d=await res.json();
+    const qs=JSON.parse(d.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
+    state.questions=qs.slice(0,state.role.qs);
+  }catch(e){
+    state.questions=Array.from({length:state.role.qs},(_,i)=>['Tell me about yourself.','Describe a challenging project.','How do you handle tight deadlines?','What are your key strengths?','Where do you see yourself in 3 years?','How do you stay updated with industry trends?','Describe a time you disagreed with your team.','What is your approach to learning new things?','How do you prioritize tasks under pressure?','Tell me about a failure and what you learned.','How do you handle feedback?','What makes you a good fit for this role?'][i%12]);
+  }
+  state.loading=false; r(); startTimer();
+}
+
+async function submitAns(){
+  const ans=document.getElementById('ans')?.value||state.answer;
+  if(!ans.trim()) return;
+  await doSubmit(ans);
+}
+
+async function doSubmit(ans){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  if(state.recognition){ state.recognition.stop(); state.listening=false; }
+  state.loading=true; state.answer=ans; r();
+  const langInstr=state.lang==='hi'?'Respond in Hindi.':state.lang==='hing'?'Respond in Hinglish.':'Respond in English.';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:500,
+        system:`Expert interviewer. Return ONLY JSON: {"score":<1-10>,"feedback":"<2 sentences>"}. ${langInstr}`,
+        messages:[{role:'user',content:`Q: "${state.questions[state.current]}"\nA: "${ans}"\nDifficulty: ${state.difficulty}`}]
+      })
+    });
+    const d=await res.json();
+    const fb=JSON.parse(d.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
+    state.feedback=fb;
+    state.results.push({q:state.questions[state.current],a:ans,score:fb.score,feedback:fb.feedback});
+    state.total+=fb.score;
+  }catch(e){
+    state.feedback={score:7,feedback:'Good attempt! Add specific examples to strengthen your answer.'};
+    state.results.push({q:state.questions[state.current],a:ans,score:7,feedback:state.feedback.feedback});
+    state.total+=7;
+  }
+  state.loading=false; r();
+}
+
+function nextQ(){
+  if(state.current+1>=state.questions.length){
+    finishInterview();
+  } else {
+    state.current++; state.answer=''; state.feedback=null; r(); startTimer();
+  }
+}
+
+function skipQ(){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  state.results.push({q:state.questions[state.current],a:'(Skipped)',score:0,feedback:'Skipped.'});
+  if(state.current+1>=state.questions.length){
+    finishInterview();
+  } else {
+    state.current++; state.answer=''; state.feedback=null; r(); startTimer();
+  }
+}
+
+function finishInterview(){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  const avg=state.results.length?Math.round(state.total/state.results.length):0;
+  const answered=state.results.filter(x=>x.a!=='(Skipped)').length;
+  const xpEarned=Math.round(avg*10+(state.difficulty==='Hard'?30:state.difficulty==='Medium'?15:0));
+
+  // Save history
+  const co=COMPANIES.find(x=>x.id===state.company);
+  stored.history.push({
+    roleIcon:state.role.icon, roleName:state.role.name,
+    level:state.level, difficulty:state.difficulty,
+    company:co&&co.id!=='none'?co.name:'none',
+    avg, answered, total:state.results.length,
+    date:new Date().toLocaleDateString()
+  });
+
+  // Add XP
+  addXP(xpEarned, state.difficulty+' Interview');
+  updateStreak();
+
+  // Achievements
+  if(stored.history.length===1) unlockAchievement('first');
+  if(stored.history.length>=10) unlockAchievement('ten');
+  if(avg===10) unlockAchievement('perfect');
+  if(state.difficulty==='Hard') unlockAchievement('hard');
+  if(stored.streak>=3) unlockAchievement('streak3');
+  const cats=new Set(stored.history.map(h=>ROLES.find(r=>r.name===h.roleName)?.cat).filter(Boolean));
+  if(cats.size>=10) unlockAchievement('allcat');
+
+  // Daily challenge
+  if(state.isDaily){
+    stored.dailyDone=true;
+    localStorage.setItem('mockai_daily',new Date().toDateString());
+    addXP(todayChallenge.xp,'Daily Challenge!');
+    state.isDaily=false;
+  }
+
+  saveStorage();
+  state.page='results'; r();
+}
+
+function resumeHTML(){
+  return `<div style="padding-bottom:70px"><div class="section" style="padding-top:16px">
+    <h2>📄 AI Resume Analyzer</h2>
+    <div style="font-size:12px;color:#7c7c9e;margin-bottom:14px">Paste your resume text — AI will find your skills, suggest roles, and give improvement tips!</div>
+
+    ${state.resumeAnalysis?`
+    <div class="resume-result">
+      <div style="text-align:center;margin-bottom:14px">
+        <div class="resume-score-ring" style="background:conic-gradient(#7c5cfc ${state.resumeAnalysis.score*36}deg,#1e1e2e ${state.resumeAnalysis.score*36}deg)">
+          <div class="resume-score-inner">
+            <div class="resume-score-n">${state.resumeAnalysis.score}</div>
+            <div class="resume-score-d">/10</div>
+          </div>
+        </div>
+        <div style="font-size:14px;font-weight:800;color:#c084fc">${state.resumeAnalysis.title||'Resume Score'}</div>
+      </div>
+
+      <div class="analyze-section">
+        <div class="analyze-label">✅ Skills Found</div>
+        <div>${(state.resumeAnalysis.skills||[]).map(s=>`<span class="skill-chip match">${s}</span>`).join('')}</div>
+      </div>
+
+      <div class="analyze-section">
+        <div class="analyze-label">🎯 Best Role Matches</div>
+        <div>${(state.resumeAnalysis.roles||[]).map(s=>`<span class="skill-chip">${s}</span>`).join('')}</div>
+      </div>
+
+      <div class="analyze-section">
+        <div class="analyze-label">⚠️ Missing Skills</div>
+        <div>${(state.resumeAnalysis.missing||[]).map(s=>`<span class="skill-chip miss">${s}</span>`).join('')}</div>
+      </div>
+
+      <div class="analyze-section">
+        <div class="analyze-label">💡 AI Suggestions</div>
+        <div class="analyze-text">${state.resumeAnalysis.suggestions||''}</div>
+      </div>
+
+      <div class="analyze-section">
+        <div class="analyze-label">📝 Summary</div>
+        <div class="analyze-text">${state.resumeAnalysis.summary||''}</div>
+      </div>
+    </div>
+    <button class="btn-outline" onclick="state.resumeAnalysis=null;state.resumeText='';r()">🔄 Analyze New Resume</button>
+    ${state.resumeAnalysis.roles&&state.resumeAnalysis.roles.length?`
+    <button class="btn" onclick="autoSelectRole('${state.resumeAnalysis.roles[0]}')">🚀 Practice for ${state.resumeAnalysis.roles[0]}</button>`:''}
+    `:`
+    ${state.resumeLoading?`
+    <div style="text-align:center;padding:30px">
+      <span class="dot"></span> <span class="dot dot2"></span> <span class="dot dot3"></span>
+      <div style="margin-top:12px;color:#7c7c9e;font-size:13px">Analyzing your resume...</div>
+    </div>`:`
+    <textarea class="ta" id="resume-ta" placeholder="Paste your resume text here...&#10;&#10;Example:&#10;John Doe&#10;Frontend Developer&#10;Skills: React, JavaScript, CSS, HTML&#10;Experience: 2 years at XYZ..." style="min-height:180px">${state.resumeText}</textarea>
+    <button class="btn" onclick="analyzeResume()">🔍 Analyze Resume</button>
+    <div style="background:#111120;border:1px solid #1e1e2e;border-radius:12px;padding:14px;margin-top:10px">
+      <div style="font-size:11px;font-weight:700;color:#c084fc;margin-bottom:8px">What you'll get:</div>
+      <div style="font-size:11px;color:#7c7c9e;line-height:1.8">
+        ✅ Skills detection<br>
+        🎯 Best role matches<br>
+        ⚠️ Missing skills to add<br>
+        💡 Improvement suggestions<br>
+        📊 Resume score out of 10
+      </div>
+    </div>`}
+    `}
+  </div></div>`;
+}
+
+// ── VIDEO FUNCTIONS ───────────────────────────────────────────────
+async function startCamera(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});
+    state.videoStream=stream;
+    state.recordedBlob=null;
+    r();
+    setTimeout(()=>{
+      const v=document.getElementById('live-video');
+      if(v){ v.srcObject=stream; v.play(); }
+    },100);
+  }catch(e){
+    alert('Camera permission denied! Please allow camera access in your browser settings.');
+  }
+}
+
+function stopCamera(){
+  if(state.videoStream){ state.videoStream.getTracks().forEach(t=>t.stop()); state.videoStream=null; }
+  if(state.mediaRecorder&&state.isRecording){ state.mediaRecorder.stop(); }
+  if(state.videoInterval){ clearInterval(state.videoInterval); }
+  state.isRecording=false; state.videoChunks=[]; state.videoSeconds=0;
+  r();
+}
+
+function startRecording(){
+  if(!state.videoStream) return;
+  state.videoChunks=[];
+  state.videoSeconds=0;
+  const mr=new MediaRecorder(state.videoStream);
+  mr.ondataavailable=e=>{ if(e.data.size>0) state.videoChunks.push(e.data); };
+  mr.onstop=()=>{
+    state.recordedBlob=new Blob(state.videoChunks,{type:'video/webm'});
+    state.isRecording=false;
+    if(state.videoInterval){ clearInterval(state.videoInterval); state.videoInterval=null; }
+    r();
+    setTimeout(()=>{
+      const v=document.getElementById('live-video');
+      if(v){ v.srcObject=state.videoStream; v.play(); }
+    },100);
+  };
+  mr.start();
+  state.mediaRecorder=mr;
+  state.isRecording=true;
+  state.videoInterval=setInterval(()=>{ state.videoSeconds++; 
+    const lbl=document.querySelector('.rec-label');
+    if(lbl) lbl.textContent=`REC ${Math.floor(state.videoSeconds/60)}:${(state.videoSeconds%60).toString().padStart(2,'0')}`;
+  },1000);
+  r();
+  setTimeout(()=>{
+    const v=document.getElementById('live-video');
+    if(v){ v.srcObject=state.videoStream; v.play(); }
+  },100);
+}
+
+function stopRecording(){
+  if(state.mediaRecorder&&state.isRecording){ state.mediaRecorder.stop(); }
+}
+
+function playRecording(){
+  if(!state.recordedBlob) return;
+  const url=URL.createObjectURL(state.recordedBlob);
+  const v=document.getElementById('live-video');
+  if(v){ v.srcObject=null; v.src=url; v.play(); }
+}
+
+// ── RESUME FUNCTIONS ──────────────────────────────────────────────
+async function analyzeResume(){
+  const ta=document.getElementById('resume-ta');
+  const text=ta?ta.value:state.resumeText;
+  if(!text.trim()){ alert('Please paste your resume text first!'); return; }
+  state.resumeText=text;
+  state.resumeLoading=true; r();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:1000,
+        system:'You are an expert HR consultant and resume analyzer. Return ONLY valid JSON, no markdown.',
+        messages:[{role:'user',content:`Analyze this resume and return JSON with these exact keys:
+{
+  "score": <number 1-10>,
+  "title": "<one line like 'Strong Frontend Developer Resume'>",
+  "skills": ["skill1","skill2",...up to 10],
+  "roles": ["Best Role Match 1","Best Role Match 2","Best Role Match 3"],
+  "missing": ["missing skill 1","missing skill 2",...up to 6],
+  "suggestions": "<2-3 sentences of improvement advice>",
+  "summary": "<2 sentences about the candidate's profile>"
+}
+
+Resume:
+${text.slice(0,3000)}`}]
+      })
+    });
+    const d=await res.json();
+    const raw=d.content.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim();
+    state.resumeAnalysis=JSON.parse(raw);
+    addXP(20,'Resume Analyzed');
+  }catch(e){
+    state.resumeAnalysis={
+      score:7,title:'Good Resume — Needs Polish',
+      skills:['Communication','Problem Solving','Teamwork'],
+      roles:['Frontend Dev','Full Stack','Product Manager'],
+      missing:['Specific metrics','GitHub link','LinkedIn URL'],
+      suggestions:'Add quantified achievements (e.g. "increased sales by 30%"). Include a strong summary at the top. Tailor keywords to the job description.',
+      summary:'The candidate shows solid foundational skills. With better formatting and measurable results, this resume will stand out.'
+    };
+  }
+  state.resumeLoading=false; r();
+}
+
+function autoSelectRole(roleName){
+  const match=ROLES.find(r=>r.name.toLowerCase().includes(roleName.toLowerCase().split(' ')[0]));
+  if(match){ state.role=match; state.tab='home'; r(); }
+  else{ state.tab='home'; r(); }
+}
+
+function restart(){
+  if(state.timerInterval) clearInterval(state.timerInterval);
+  if(state.videoStream) state.videoStream.getTracks().forEach(t=>t.stop());
+  if(state.videoInterval) clearInterval(state.videoInterval);
+  state={page:'home',tab:'home',role:null,level:'Mid-level',
+    difficulty:'Medium',lang:state.lang,cat:'all',company:'none',
+    questions:[],current:0,answer:'',feedback:null,results:[],total:0,
+    loading:false,timerSec:0,timerMax:0,timerInterval:null,
+    recognition:null,listening:false,isDaily:false,
+    videoStream:null,mediaRecorder:null,videoChunks:[],
+    isRecording:false,recordedBlob:null,videoSeconds:0,videoInterval:null,
+    resumeText:'',resumeAnalysis:null,resumeLoading:false};
+  r();
+}
+
+r();
+</script>
+</body>
+</html>
